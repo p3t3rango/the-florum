@@ -14,7 +14,8 @@ export default function CharacterCreation(): React.ReactElement {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="w-full max-w-2xl p-8 border-2 border-purple-600 rounded-lg bg-black/50 backdrop-blur-sm shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+      className="w-full max-w-4xl p-6 border-2 border-[#00ff00] rounded-lg bg-black/90 
+      backdrop-blur-sm shadow-[0_0_20px_rgba(0,255,0,0.3)] terminal-window"
     >
       {step === 'intro' ? (
         <div className="text-2xl font-vt323">
