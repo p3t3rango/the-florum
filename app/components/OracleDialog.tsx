@@ -92,8 +92,15 @@ const RACES = [
   }
 ]
 
-// Add more predefined options
-const CHARACTER_OPTIONS = {
+// First, let's define an interface for our option type
+interface CharacterOption {
+  id: string
+  name: string
+  description: string
+}
+
+// Then type our CHARACTER_OPTIONS object
+const CHARACTER_OPTIONS: Record<string, CharacterOption[]> = {
   role: [
     { id: 'warrior', name: 'Warrior', description: 'Combat specialist and protector' },
     { id: 'mystic', name: 'Mystic', description: 'Master of ancient knowledge and energy' },
@@ -116,10 +123,10 @@ const CHARACTER_OPTIONS = {
     { id: 'massive', name: 'Massive', description: 'Imposing and powerful' },
     { id: 'average', name: 'Average', description: 'Balanced build' }
   ]
-}
+} as const
 
-// Add a helper function to determine if an attribute has predefined options
-const hasPresetOptions = (attribute: string): boolean => {
+// Update the helper function to be type-safe
+const hasPresetOptions = (attribute: string): attribute is keyof typeof CHARACTER_OPTIONS | 'race' => {
   return attribute === 'race' || Object.keys(CHARACTER_OPTIONS).includes(attribute)
 }
 
@@ -259,8 +266,12 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
     return renderTextInput(attribute)
   }
 
-  // New component for option selection
+  // Update the renderOptionSelection function
   const renderOptionSelection = (attribute: string) => {
+    if (!hasPresetOptions(attribute)) {
+      return renderTextInput(attribute)
+    }
+
     const options = attribute === 'race' ? RACES : CHARACTER_OPTIONS[attribute]
     
     return (
