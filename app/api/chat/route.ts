@@ -15,8 +15,14 @@ export async function POST(req: Request) {
       messages: [{ role: "user", content: message }],
     })
 
-    return NextResponse.json({ response: response.content[0].text })
+    // Get the text content from the response
+    const messageContent = response.content[0].type === 'text' 
+      ? response.content[0].text 
+      : 'No text response available'
+
+    return NextResponse.json({ response: messageContent })
   } catch (error) {
+    console.error('Chat API error:', error)
     return NextResponse.json({ error: 'Failed to get response' }, { status: 500 })
   }
 } 
