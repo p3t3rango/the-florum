@@ -1,8 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import TypewriterEffect from 'typewriter-effect'
 import toast from 'react-hot-toast'
+import { motion } from 'framer-motion'
+
+interface Message {
+  role: 'oracle' | 'user'
+  content: string
+}
 
 interface Character {
   [key: string]: string
@@ -24,7 +30,18 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
   const [currentAttribute, setCurrentAttribute] = useState(0)
   const [userInput, setUserInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [oracleResponse, setOracleResponse] = useState('')
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'oracle', content: 'Tell me about your character...' }
+  ])
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const getCurrentPrompt = () => {
     const attribute = CHARACTER_ATTRIBUTES[currentAttribute]
@@ -39,7 +56,7 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
         body: JSON.stringify({ message: getCurrentPrompt() })
       })
       const data = await response.json()
-      setOracleResponse(data.response)
+      setMessages(prev => [...prev, { role: 'oracle', content: data.response }])
     } catch (error) {
       toast.error('Failed to get Oracle guidance')
     }
@@ -47,7 +64,10 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
+    if (!userInput.trim()) return
+
     setIsLoading(true)
+    setMessages(prev => [...prev, { role: 'user', content: userInput }])
     
     try {
       const currentKey = CHARACTER_ATTRIBUTES[currentAttribute]
@@ -58,7 +78,6 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
         setCurrentAttribute(prev => prev + 1)
         await getOracleGuidance()
       } else {
-        // Character complete - proceed to image generation
         handleCharacterComplete()
       }
     } catch (error) {
@@ -106,25 +125,54 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
   }
 
   return (
-    <div className="space-y-4">
-      <div className="text-xl font-mono">
-        <TypewriterEffect
-          onInit={(typewriter): void => {
-            typewriter
-              .typeString(oracleResponse || 'Tell me about your character...')
-              .start()
-          }}
-        />
+    <div className="space-y-4 h-[600px] flex flex-col">
+      <div className="flex-1 overflow-y-auto space-y-4 font-vt323 text-xl p-4">
+        {messages.map((message, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`p-4 rounded-lg border ${
+              message.role === 'oracle'
+                ? 'bg-purple-900/20 border-purple-500 ml-4'
+                : 'bg-red-900/20 border-red-500 mr-4'
+            }`}
+          >
+            {message.role === 'oracle' ? (
+              <TypewriterEffect
+                onInit={(typewriter): void => {
+                  typewriter.typeString(message.content).start()
+                }}
+                options={{
+                  cursor: '_',
+                  delay: 30,
+                }}
+              />
+            ) : (
+              <div>{message.content}</div>
+            )}
+          </motion.div>
+        ))}
+        <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSubmit} className="mt-4">
-        <input
-          type="text"
-          value={userInput}
-          onChange={(e): void => setUserInput(e.target.value)}
-          className="w-full bg-black border-2 border-green-500 text-green-500 p-2 rounded"
-          placeholder="Type your answer..."
-          disabled={isLoading}
-        />
+      <form onSubmit={handleSubmit} className="mt-auto p-4">
+        <div className="relative">
+          <input
+            type="text"
+            value={userInput}
+            onChange={(e): void => setUserInput(e.target.value)}
+            className="w-full bg-black/50 border-2 border-purple-500 text-purple-300 p-4 pr-24 rounded-lg font-vt323 text-xl focus:outline-none focus:border-red-500 transition-colors"
+            placeholder="Type your answer..."
+            disabled={isLoading}
+          />
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-purple-500 text-black font-press-start text-sm rounded hover:bg-red-500 transition-colors disabled:opacity-50"
+          >
+            Send
+          </button>
+        </div>
       </form>
     </div>
   )
