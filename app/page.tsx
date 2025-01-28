@@ -17,7 +17,7 @@ export default function Home(): React.ReactElement {
           transition={{ duration: 0.5 }}
           className="text-center space-y-4"
         >
-          <h1 className="text-6xl font-press-start mb-8 text-purple-500">
+          <h1 className="text-6xl font-press-start mb-8 text-purple-500 glow">
             <TypewriterEffect
               onInit={(typewriter): void => {
                 typewriter
