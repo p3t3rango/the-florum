@@ -72,15 +72,35 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
       .map(([key, value]) => `${key}: ${value}`).join(', ')}`
     
     try {
-      const response = await fetch('/api/generate-image', {
+      // Generate image
+      const imageResponse = await fetch('/api/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: imagePrompt })
       })
-      const data = await response.json()
-      setCharacter(prev => ({ ...prev, imageUrl: data.imageUrl }))
+      const imageData = await imageResponse.json()
+      
+      // Save character to database
+      const characterData = {
+        ...character,
+        imageUrl: imageData.imageUrl,
+        isPublic: false // default to private
+      }
+      
+      const saveResponse = await fetch('/api/characters', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(characterData)
+      })
+      
+      if (!saveResponse.ok) {
+        throw new Error('Failed to save character')
+      }
+      
+      toast.success('Character created successfully!')
     } catch (error) {
-      toast.error('Failed to generate character image')
+      console.error('Error:', error)
+      toast.error('Failed to complete character creation')
     }
   }
 

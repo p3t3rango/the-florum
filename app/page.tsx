@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import TypewriterEffect from 'typewriter-effect'
 import { motion } from 'framer-motion'
-import CharacterCreation from '@/components/CharacterCreation'
+import CharacterCreation from './components/CharacterCreation'
 
 export default function Home(): React.ReactElement {
   const [stage, setStage] = useState<'intro' | 'oracle'>('intro')
