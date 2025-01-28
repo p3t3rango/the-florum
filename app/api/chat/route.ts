@@ -69,7 +69,7 @@ export async function POST(req: Request) {
       max_tokens: 1024,
       messages: [
         { 
-          role: "system", 
+          role: "assistant",
           content: ORACLE_PRIMER
         },
         { 
