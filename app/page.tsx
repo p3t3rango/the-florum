@@ -15,9 +15,9 @@ export default function Home(): React.ReactElement {
   }
 
   return (
-    <main className="min-h-screen bg-black relative overflow-hidden flex">
-      <div className="flex-1 flex items-center justify-center p-4">
-        <div className="w-full max-w-4xl h-[85vh]">
+    <main className="min-h-screen bg-black relative overflow-hidden">
+      <div className="absolute inset-0 flex items-center justify-center p-6">
+        <div className="w-full max-w-4xl h-[80vh]">
           {stage === 'intro' ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.5 }}
@@ -55,10 +55,10 @@ export default function Home(): React.ReactElement {
               transition={{ duration: 0.5 }}
               className="w-full h-full border-2 border-[#00ff00] rounded-lg bg-black/90 
               backdrop-blur-sm shadow-[0_0_20px_rgba(0,255,0,0.3)] terminal-window
-              flex items-center justify-center p-8"
+              flex items-center justify-center"
             >
-              <div className="text-center">
-                <h2 className="text-6xl font-tech-mono leading-relaxed">
+              <div className="text-center max-w-2xl px-4">
+                <h2 className="text-5xl font-tech-mono leading-relaxed">
                   <TypewriterEffect
                     onInit={(typewriter): void => {
                       typewriter
