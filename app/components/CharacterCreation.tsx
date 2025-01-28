@@ -19,9 +19,9 @@ export default function CharacterCreation(): React.ReactElement {
         backdrop-blur-sm shadow-[0_0_20px_rgba(0,255,0,0.3)] terminal-window
         flex flex-col"
       >
-        <div className="flex-1 overflow-y-auto pt-12">
+        <div className="flex-1 overflow-y-auto pt-8">
           {step === 'intro' ? (
-            <div className="h-full flex items-center justify-center p-8">
+            <div className="h-full flex items-center justify-center p-6">
               <div className="text-2xl font-tech-mono text-[#00ff00]">
                 <TypewriterEffect
                   onInit={(typewriter): void => {
@@ -38,7 +38,7 @@ export default function CharacterCreation(): React.ReactElement {
               </div>
             </div>
           ) : (
-            <div className="h-full p-8">
+            <div className="h-full p-4">
               <OracleDialog character={character} setCharacter={setCharacter} />
             </div>
           )}

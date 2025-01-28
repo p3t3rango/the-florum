@@ -126,13 +126,13 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 overflow-y-auto space-y-4 font-tech-mono text-xl">
+      <div className="flex-1 overflow-y-auto space-y-4 font-tech-mono text-lg">
         {messages.map((message, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`p-4 rounded-lg border ${
+            className={`p-3 rounded-lg border ${
               message.role === 'oracle'
                 ? 'bg-[#00ff00]/10 border-[#00ff00] ml-4'
                 : 'bg-[#00ff00]/5 border-[#00ff00]/50 mr-4'
@@ -155,21 +155,21 @@ export default function OracleDialog({ character, setCharacter }: Props): React.
         ))}
         <div ref={messagesEndRef} />
       </div>
-      <form onSubmit={handleSubmit} className="p-4 mt-auto border-t border-[#00ff00]/30">
+      <form onSubmit={handleSubmit} className="p-3 mt-auto border-t border-[#00ff00]/30">
         <div className="relative">
           <input
             type="text"
             value={userInput}
             onChange={(e): void => setUserInput(e.target.value)}
-            className="w-full bg-black/50 border-2 border-[#00ff00] text-[#00ff00] p-4 pr-24 rounded-lg 
-            font-tech-mono text-xl focus:outline-none focus:border-[#00ff00]/80 transition-colors"
+            className="w-full bg-black/50 border-2 border-[#00ff00] text-[#00ff00] p-3 pr-20 rounded-lg 
+            font-tech-mono text-lg focus:outline-none focus:border-[#00ff00]/80 transition-colors"
             placeholder="Type your answer..."
             disabled={isLoading}
           />
           <button
             type="submit"
             disabled={isLoading}
-            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-[#00ff00] text-black 
+            className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#00ff00] text-black 
             font-tech-mono text-sm rounded hover:bg-[#00ff00]/80 transition-colors disabled:opacity-50"
           >
             Send
