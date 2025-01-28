@@ -13,32 +13,30 @@ export default function CharacterCreation(): React.ReactElement {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="absolute inset-0 flex flex-col"
+      className="h-full flex flex-col"
     >
-      <div className="flex-1 overflow-y-auto">
-        {step === 'intro' ? (
-          <div className="h-full flex items-center justify-center p-8">
-            <div className="text-2xl font-tech-mono text-[#00ff00]">
-              <TypewriterEffect
-                onInit={(typewriter): void => {
-                  typewriter
-                    .typeString('What character would you like to spawn today?')
-                    .callFunction(() => setStep('creation'))
-                    .start()
-                }}
-                options={{
-                  cursor: '_',
-                  delay: 30,
-                }}
-              />
-            </div>
+      {step === 'intro' ? (
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="text-2xl font-tech-mono text-[#00ff00]">
+            <TypewriterEffect
+              onInit={(typewriter): void => {
+                typewriter
+                  .typeString('What character would you like to spawn today?')
+                  .callFunction(() => setStep('creation'))
+                  .start()
+              }}
+              options={{
+                cursor: '_',
+                delay: 30,
+              }}
+            />
           </div>
-        ) : (
-          <div className="h-full p-8">
-            <OracleDialog character={character} setCharacter={setCharacter} />
-          </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="flex-1 p-8">
+          <OracleDialog character={character} setCharacter={setCharacter} />
+        </div>
+      )}
     </motion.div>
   )
 } 
